@@ -5,40 +5,11 @@
   <title>Día del padre - iCo Medios</title>
   <meta http-equiv="refresh" content="180">
 
-  <!-- Unbounded desde Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Salsa&display=swap" rel="stylesheet">
 
   <style>
-    /* Fallback local (pon los .ttf en la misma carpeta y ajusta los nombres si difieren) */
-    @font-face {
-      font-family: 'UnboundedLocal';
-      src: url('Unbounded-Regular.ttf') format('truetype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'UnboundedLocal';
-      src: url('Unbounded-Medium.ttf') format('truetype');
-      font-weight: 500;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'UnboundedLocal';
-      src: url('Unbounded-Bold.ttf') format('truetype');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'UnboundedLocal';
-      src: url('Unbounded-ExtraBold.ttf') format('truetype');
-      font-weight: 800;
-      font-style: normal;
-      font-display: swap;
-    }
-
     html, body {
       margin: 0;
       padding: 0;
@@ -51,44 +22,49 @@
       width: 100vw;
       height: 100vh;
     }
-  
+
     video#fondoVideo {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       z-index: 0;
     }
-  
-    .mensaje {
+
+    /* --- NUEVO CONTENEDOR CENTRADO --- */
+    #nombres {
       position: absolute;
-      bottom: 28vh;
-      left: 60%;
+      bottom: 5vh;
+      left: 50%;
       transform: translateX(-50%);
-      z-index: 2;
-      font-weight: 700;
-      color: #E6736A;
-      font-size: 3.5vw;
-      font-style: normal;
-
-      /* Intenta primero la local; si no, la de Google; si no, sans-serif */
-      font-family: 'UnboundedLocal', 'Unbounded', sans-serif !important;
-
-      opacity: 0;
-      transition: opacity 0.5s ease-in;
+      width: 80vw;
       text-align: center;
-      white-space: nowrap;
+      z-index: 3;
     }
-  
+
+    .mensaje {
+      position: relative;
+      color: #FFFF;
+      font-size: 4vw;
+      font-style: normal;
+      font-family: "Salsa", cursive;
+      font-weight: 400;
+      opacity: 0;
+      transition: opacity 0.9s ease-in;
+    }
+
     .mensaje.mostrar {
       opacity: 1;
     }
+
   </style>
 </head>
+
 <body>
   <div class="contenedor">
+
     <video autoplay loop muted playsinline id="fondoVideo">
       <source src="fondo.mp4" type="video/mp4">
       Tu navegador no soporta video.
@@ -97,30 +73,45 @@
     <div id="nombres">
       <div class="mensaje para"></div>
     </div>
+
   </div>
 
   <script>
-    const url = "https://script.google.com/macros/s/AKfycbxyPI4xpgj0ibff7t49Gy5MJKxZulYvRt5EEjgttmTOwPCEguZZidmSGlkUIPRtC0yC/exec";
+    const url = "https://script.google.com/macros/s/AKfycbwn-mXqNy6qZ3yRkcfuNej_faIIjNudd0dyM8cU5BiSxS4Np3H1zaG5oFzeA9uLxjbL/exec";
 
     fetch(url)
       .then(res => res.json())
       .then(aprobados => {
         const contenedorMensaje = document.querySelector(".para");
 
-        if (aprobados.length > 0) {
-          const elegido = aprobados[Math.floor(Math.random() * aprobados.length)];
-          contenedorMensaje.textContent = (elegido.para || "--").toUpperCase();
-        } else {
-          contenedorMensaje.textContent = "--";
+        if (!aprobados || aprobados.length === 0) {
+          contenedorMensaje.innerText = "--";
+          return;
         }
 
-        setTimeout(() => {
-          contenedorMensaje.classList.add("mostrar");
-        }, 1000);
+        let index = Math.floor(Math.random() * aprobados.length);
+
+        function mostrarNombre(i) {
+          contenedorMensaje.classList.remove("mostrar");
+          setTimeout(() => {
+            contenedorMensaje.innerText = (aprobados[i].para || "--").toUpperCase();
+            contenedorMensaje.classList.add("mostrar");
+          }, 300);
+        }
+
+        mostrarNombre(index);
+
+        setInterval(() => {
+          index = (index + 1) % aprobados.length;
+          mostrarNombre(index);
+        }, 5000);
       });
   </script>
+
 </body>
 </html>
+
+
 
 
 
