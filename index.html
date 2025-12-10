@@ -33,30 +33,46 @@
       z-index: 0;
     }
 
-    /* --- NUEVO CONTENEDOR CENTRADO --- */
+    /* --- CONTENEDOR PRINCIPAL --- */
     #nombres {
       position: absolute;
-      bottom: 11vh;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80vw;
-      text-align: center;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
       z-index: 3;
     }
 
     .mensaje {
-      position: relative;
+      position: absolute;
       color: #FFFF;
       font-size: 3.5vw;
-      font-style: normal;
       font-family: "Salsa", cursive;
       font-weight: 400;
       opacity: 0;
-      transition: opacity 0.9s ease-in;
+      transition: opacity 0.8s ease-in;
+      width: 100%;
+      text-align: center;
     }
 
     .mensaje.mostrar {
       opacity: 1;
+    }
+
+    /* ---- COORDENADAS INDIVIDUALES ---- */
+    .nombre {
+      top: 60vh;   /* AJUSTA AQUÍ */
+      left: 0;
+    }
+
+    .deseo1 {
+      top: 68vh;   /* AJUSTA AQUÍ */
+      left: 0;
+    }
+
+    .deseo2 {
+      top: 76vh;   /* AJUSTA AQUÍ */
+      left: 0;
     }
 
   </style>
@@ -71,44 +87,61 @@
     </video>
 
     <div id="nombres">
-      <div class="mensaje para"></div>
+      <div class="mensaje nombre"></div>
+      <div class="mensaje deseo1"></div>
+      <div class="mensaje deseo2"></div>
     </div>
 
   </div>
 
   <script>
-    const url = "https://script.google.com/macros/s/AKfycbwn-mXqNy6qZ3yRkcfuNej_faIIjNudd0dyM8cU5BiSxS4Np3H1zaG5oFzeA9uLxjbL/exec";
+    const url = "https://script.google.com/macros/s/AKfycbwdj28x2XpZ4nrzo8R67KA3E-OSm44CWrPCXRntUuJxBoZVOjPUeR_tyaSWTj7DIs9CVQ/exec";
 
     fetch(url)
       .then(res => res.json())
       .then(aprobados => {
-        const contenedorMensaje = document.querySelector(".para");
+
+        const elNombre  = document.querySelector(".nombre");
+        const elDeseo1  = document.querySelector(".deseo1");
+        const elDeseo2  = document.querySelector(".deseo2");
 
         if (!aprobados || aprobados.length === 0) {
-          contenedorMensaje.innerText = "--";
+          elNombre.innerText = "--";
+          elDeseo1.innerText = "--";
+          elDeseo2.innerText = "--";
           return;
         }
 
         let index = Math.floor(Math.random() * aprobados.length);
 
-        function mostrarNombre(i) {
-          contenedorMensaje.classList.remove("mostrar");
+        function mostrar(i) {
+          elNombre.classList.remove("mostrar");
+          elDeseo1.classList.remove("mostrar");
+          elDeseo2.classList.remove("mostrar");
+
           setTimeout(() => {
-            contenedorMensaje.innerText = (aprobados[i].para || "--").toUpperCase();
-            contenedorMensaje.classList.add("mostrar");
+            elNombre.innerText = (aprobados[i].nombre || "--").toUpperCase();
+            elDeseo1.innerText = (aprobados[i].deseo1 || "--").toUpperCase();
+            elDeseo2.innerText = (aprobados[i].deseo2 || "--").toUpperCase();
+
+            elNombre.classList.add("mostrar");
+            elDeseo1.classList.add("mostrar");
+            elDeseo2.classList.add("mostrar");
+
           }, 300);
         }
 
-        mostrarNombre(index);
+        mostrar(index);
 
         setInterval(() => {
           index = (index + 1) % aprobados.length;
-          mostrarNombre(index);
+          mostrar(index);
         }, 5000);
       });
   </script>
 </body>
 </html>
+
 
 
 
