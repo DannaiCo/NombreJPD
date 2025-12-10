@@ -43,7 +43,7 @@
       z-index: 3;
     }
 
-    .mensaje {
+  .mensaje {
       position: absolute;
       color: #1A3869;
       font-size: 3.5vw;
@@ -51,9 +51,10 @@
       font-weight: 400;
       opacity: 0;
       transition: opacity 0.8s ease-in;
-      width: 100%;
-      text-align: center;
-    }
+      width: auto;          /* PERMITE MOVER A LO ANCHO */
+      left: 0;              /* PUNTO DE PARTIDA */
+}
+
 
     .mensaje.mostrar {
       opacity: 1;
@@ -141,6 +142,7 @@
   </script>
 </body>
 </html>
+
 
 
 
